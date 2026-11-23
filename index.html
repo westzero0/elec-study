@@ -187,7 +187,7 @@ dialog::backdrop { background: rgba(0,0,0,0.3); }
   <form id="gateForm" autocomplete="off">
     <div class="sub">구매자 전용</div>
     <h1>수포자도 전기기사 딴다<br>공부 도구</h1>
-    <p class="muted">전자책 PDF 첫 장의 접속 코드를 넣어 주세요. 한 번만 넣으면 이 폰이 기억합니다.</p>
+    <p class="muted">전자책 PDF 「이 책 쓰는 법」 쪽(4쪽)의 접속 코드를 넣어 주세요. 한 번만 넣으면 이 폰이 기억합니다.</p>
     <input id="gateCode" inputmode="latin" autocapitalize="characters" spellcheck="false" placeholder="접속 코드" aria-label="접속 코드">
     <button type="submit">시작하기</button>
     <p class="err" id="gateErr" role="alert"></p>
@@ -326,7 +326,7 @@ $('#gateForm').onsubmit = async e => {
   e.preventDefault();
   const h = await sha($('#gateCode').value.trim().toUpperCase());
   if (h === CODE_HASH) { localStorage.setItem('supo-ok', h); $('#gate').hidden = true; }
-  else $('#gateErr').textContent = '코드가 맞지 않습니다. PDF 첫 장을 다시 확인해 주세요.';
+  else $('#gateErr').textContent = '코드가 맞지 않습니다. PDF 4쪽 「이 책 쓰는 법」을 다시 확인해 주세요.';
 };
 
 /* ---------- 탭 ---------- */
