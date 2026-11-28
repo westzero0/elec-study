@@ -33,9 +33,10 @@
 <main>
 <!-- ===== 1. 합격 분전반 (책 Part 1 목표 점수표) ===== -->
 <section id="score">
-  <div class="box rule">필기 합격 조건: <b>모든 과목 40점 이상 + 평균 60점 이상 (총점 300점 이상)</b><br>과목 5개는 분기 회로, 합격은 메인 투입입니다. 40점 미만 과목은 트립(과락)입니다.</div>
+  <div class="box rule">필기 합격 조건: <b>모든 과목 40점 이상 + 평균 60점 이상 (총점 300점 이상)</b><br>과목 5개는 분기 회로, 합격은 메인 투입입니다. 40점 미만 과목은 트립(과락)입니다. 1문제는 5점입니다.</div>
 
   <div class="panel" aria-live="polite">
+    <div class="samplenote" id="samplenote" hidden><span>아래는 <b>예시 기록</b>입니다. 내 점수를 처음 저장하면 사라집니다.</span><span class="sbtns"><a class="btn primary" href="#sform">내 점수 넣기</a><button type="button" class="btn" id="clearsample">예시 지우기</button></span></div>
     <div class="ph"><span id="plabel"></span><span id="pstreak"></span></div>
     <div class="mainrow">
       <div class="big" id="mainb"><span class="tape">메인</span><span class="sl"><span class="lv"></span></span><span class="led"></span></div>
@@ -43,7 +44,6 @@
     </div>
     <div class="brow" id="branches"></div>
     <p class="memo" id="memo"></p>
-    <div class="samplenote" id="samplenote" hidden><span>지금 보이는 기록은 예시입니다. 첫 기록을 저장하면 사라집니다.</span><button type="button" class="btn" id="clearsample">예시 지우기</button></div>
   </div>
 
   <form class="box" id="sform" novalidate>
@@ -58,8 +58,14 @@
     <div class="btns"><button type="submit" class="btn primary">기록 저장</button><button type="button" class="btn" id="fclear">입력 지우기</button></div>
   </form>
 
+  <details class="box fold">
+    <summary>내 목표 점수</summary>
+    <p class="muted" style="margin:0">목표 칸 합이 <b>300을 넘게</b> 잡으세요. 딱 300으로 잡으면 실수 한 번에 떨어집니다. 분전반 차단기 아래에 목표가 같이 보입니다.</p>
+    <div class="f5" id="gscores"></div>
+    <p class="gsum" id="gsum"></p>
+  </details>
   <div class="box">
-    <h2 class="bh">회로별 점검 기록</h2>
+    <h2 class="bh">과목별 점수 그래프</h2>
     <p class="muted" style="margin:0">검은 선은 평균, 파란 선은 고른 과목, 점선은 합격선 60입니다.</p>
     <div class="chips" id="schips"></div>
     <div class="fig"><svg id="chart" role="img" aria-label="기록별 과목 점수와 평균 추이"></svg></div>
@@ -70,12 +76,6 @@
     <div id="log"></div>
   </div>
 
-  <details class="box fold">
-    <summary>내 목표 점수</summary>
-    <p class="muted" style="margin:0">목표 칸 합이 <b>300을 넘게</b> 잡으세요. 딱 300으로 잡으면 실수 한 번에 떨어집니다. 분전반 차단기 아래에 목표가 같이 보입니다.</p>
-    <div class="f5" id="gscores"></div>
-    <p class="gsum" id="gsum"></p>
-  </details>
 
   <details class="box fold">
     <summary>기록 백업 (폰 바꿀 때)</summary>
@@ -98,7 +98,7 @@
   </div>
   <div class="box" id="prac">
     <h2 style="margin:0; font-size:16px">필기 합격 뒤 실기 일정</h2>
-    <p class="muted" style="margin:2px 0 0">날짜는 해마다 달라요. 큐넷 시행 일정에서 확인해 넣으세요.</p>
+    <p class="muted" style="margin:2px 0 0">날짜는 해마다 다릅니다. 큐넷 시행 일정에서 확인해 넣으세요.</p>
     <label class="field"><span>필기 합격 발표일</span><input type="date" data-k="pass"></label>
     <label class="field"><span>실기 원서접수 시작</span><input type="date" data-k="apply"></label>
     <label class="field"><span>실기 시험일</span><input type="date" data-k="prac"></label>
@@ -223,7 +223,7 @@ function showTab(t) {
   $('#title').textContent = TITLES[t];
   $('#addNote').hidden = t !== 'notes';
   scrollTo(0, 0);
-  location.hash = t;
+  history.replaceState(null, '', '#' + t);
 }
 document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
 
@@ -282,7 +282,7 @@ function streak() {
 }
 function renderPanel() {
   const f = readForm(), L = recs().at(-1); let sc = null, label = '기록 없음';
-  if (f.full) { sc = f.vals; label = '입력 중인 점수 미리보기'; } else if (L) { sc = L.sc; label = '최근 기록 · ' + L.name; }
+  if (f.full) { sc = f.vals; label = '입력 중인 점수 미리보기'; } else if (L) { sc = L.sc; label = (isSample() ? '예시 기록 · ' : '최근 기록 · ') + L.name; }
   $('#plabel').textContent = label;
   const n = streak(); $('#pstreak').textContent = n ? `주간 정기점검 ${n}주 연속` : '이번 주 점검 전';
   $('#branches').innerHTML = SUBJ.map((_, i) => brk(i, sc ? sc[i] : null)).join('');
@@ -311,12 +311,12 @@ function memo() {
 let logAll = false;
 function renderLog() {
   const R = recs().reverse(), show = logAll ? R : R.slice(0, 5);
-  $('#log').innerHTML = !R.length ? '<p class="muted">아직 기록이 없습니다.</p>' : show.map(r => {
+  $('#log').innerHTML = (isSample() ? '<p class="muted" style="margin:0 0 6px">예시 기록입니다. 내 점수를 저장하면 사라집니다.</p>' : '') + (!R.length ? '<p class="muted">아직 기록이 없습니다.</p>' : show.map(r => {
     const c = calc(r.sc);
     return `<div class="lrow"><div class="lh"><b>${esc(r.name)}</b><span class="muted num">${esc(r.date.replace(/-/g, '.'))}</span></div>
       <div class="lsc">${r.sc.map((v, i) => `<span class="${v < 40 ? 'low' : ''}"><small>${SHORT[i]}</small><span class="num">${v}</span></span>`).join('')}</div>
       <div class="lf"><span>평균 <span class="num">${r1(c.avg)}</span> · ${c.pass ? '메인 투입' : `남은 <span class="num">${c.need}</span>문제`}</span>${isSample() ? '' : `<button type="button" class="btn danger del" data-id="${esc(r.id)}">삭제</button>`}</div></div>`;
-  }).join('') + (R.length > 5 ? `<button type="button" class="btn line more" id="logMore">${logAll ? '최근 5개만 보기' : `전체 ${R.length}개 보기`}</button>` : '');
+  }).join('') + (R.length > 5 ? `<button type="button" class="btn line more" id="logMore">${logAll ? '최근 5개만 보기' : `전체 ${R.length}개 보기`}</button>` : ''));
 }
 function renderChips() {
   const L = recs().at(-1); if (sel === null) sel = L ? L.sc.indexOf(Math.min(...L.sc)) : 0;
@@ -660,7 +660,7 @@ function renderCard() {
   const d = deck(), fc = $('#fcard');
   fc.classList.remove('open');
   if (!d.length) {
-    $('#fcat').textContent = ''; $('#ftxt').textContent = '다 외웠습니다! “못 외운 것만 보기”를 끄면 전부 다시 볼 수 있어요.';
+    $('#fcat').textContent = ''; $('#ftxt').textContent = '다 외웠습니다! “못 외운 것만 보기”를 끄면 전부 다시 볼 수 있습니다.';
     $('#fhint').hidden = true; $('#fcount').textContent = ''; fc.classList.remove('known'); $('#fknow').disabled = true; return;
   }
   cIdx = (cIdx + d.length) % d.length;

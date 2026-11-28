@@ -8,8 +8,8 @@ const CALC = [
     q: 'R = 6Ω, X = 8Ω 직렬회로. 임피던스 6 + j8 의 크기와 위상각은?',
     a: 'Z = 10 Ω, θ = 53.13° → 역률 cosθ = 6 ÷ 10 = 0.6',
     steps: [
-      { k: 'MODE 2', s: 'CMPLX', n: '복소수 모드로 들어갑니다. 화면 위에 CMPLX 가 뜨면 맞아요.' },
-      { k: '6 + 8 ENG', s: '6+8i', n: '허수 j 는 계산기에서 i 입니다. CMPLX 모드에서 ENG 키가 i 예요.' },
+      { k: 'MODE 2', s: 'CMPLX', n: '복소수 모드로 들어갑니다. 화면 위에 CMPLX 가 뜨면 맞습니다.' },
+      { k: '6 + 8 ENG', s: '6+8i', n: '허수 j 는 계산기에서 i 입니다. CMPLX 모드에서 ENG 키가 i 입니다.' },
       { k: 'SHIFT 2 3', s: '6+8i▶r∠θ', n: '▶r∠θ: 크기와 각도로 바꾸기' },
       { k: '=', s: '10∠53.13010235', n: '크기 10Ω, 위상각 53.13°' },
       { k: 'MODE 1', s: '(CMPLX 표시가 사라짐)', n: '다 썼으면 일반 계산 모드로 돌아옵니다.' },
@@ -128,7 +128,7 @@ const CALC = [
     a: 'f = 1 ÷ (2π√(LC)) ≈ 503 Hz',
     steps: [
       { k: '0.01 × 0.00001 =', s: '1/10000000 또는 1×10⁻⁷', n: '① L × C 부터. (10mH = 0.01, 10μF = 0.00001) 분수로 나와도 그대로 다음으로' },
-      { k: '√ Ans =', s: '3.16227766×10⁻⁴', n: '② √ 를 누르면 ①의 답이 화면에서 사라지는데 정상이에요. 답은 Ans 키에 저장돼 있어요. √ 빈칸에 Ans(= 왼쪽 키)를 넣고 =. √ 가 붙은 꼴로 나오면 S⇔D' },
+      { k: '√ Ans =', s: '3.16227766×10⁻⁴', n: '② √ 를 누르면 ①의 답이 화면에서 사라지는데 정상입니다. 답은 Ans 키에 저장돼 있습니다. √ 빈칸에 Ans(= 왼쪽 키)를 넣고 =. √ 가 붙은 꼴로 나오면 S⇔D' },
       { k: '× 2 × SHIFT ×10ˣ =', s: '1.986917653×10⁻³', n: '③ × 2π. 첫 × 를 누르면 화면에 Ans× 가 저절로 붙습니다. π 는 ×10ˣ 위 노란 글씨' },
       { k: 'x⁻¹ =', s: '503.292121', n: '④ 1 ÷ 방금 답. x⁻¹ 은 CALC 줄 오른쪽 키. 약 503 Hz' },
     ],
@@ -148,7 +148,7 @@ function calcApp(root, list, opts = {}) {
   const setup = `<div class="box warnbox"><h3>풀기 전에 한 번</h3>
     <p style="margin:0;font-size:14px">${calcKeys('SHIFT MODE 3')} 각도 단위 Deg (화면 위 D)<br>
     ${calcKeys('MODE 1')} 일반 계산 모드</p>
-    <p class="muted" style="margin:6px 0 0">카시오 fx-570ES PLUS 기준입니다. 다른 기종은 키 위치가 다를 수 있어요.</p></div>`;
+    <p class="muted" style="margin:6px 0 0">카시오 fx-570ES PLUS 기준입니다. 다른 기종은 키 위치가 다를 수 있습니다.</p></div>`;
   function draw() {
     if (!p) {
       root.innerHTML = setup + list.map((x, j) => `<button class="cprob" data-j="${j}"><span class="no">${x.no}</span>

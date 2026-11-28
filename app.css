@@ -76,8 +76,10 @@ section h2 { font-size: 20px; margin: 4px 2px 12px; letter-spacing: -0.02em; }
 .b em { font-style: normal; font-size: 11px; color: var(--g2); white-space: nowrap; }
 .memo { margin: 12px 2px 0; font-size: 15px; line-height: 1.6; }
 .samplenote { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: space-between; font-size: 13px; color: var(--g1);
-  background: var(--hl-soft); border-radius: 8px; padding: 4px 4px 4px 10px; margin-top: 10px; }
-.samplenote .btn { font-size: 13px; padding: 6px 8px; text-decoration: underline; }
+  background: var(--hl-soft); border-radius: 8px; padding: 8px 8px 8px 12px; margin-bottom: 12px; }
+.samplenote .sbtns { display: flex; gap: 6px; }
+.samplenote .btn { font-size: 14px; min-height: 40px; padding: 8px 12px; text-decoration: none; }
+#sform { scroll-margin-top: 76px; }
 .f2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 8px; margin-top: 12px; }
 .f5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
 .f2 label, .f5 label { display: block; font-size: 12px; color: var(--g2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
@@ -262,3 +264,6 @@ dialog::backdrop { background: rgba(0,0,0,0.3); }
 .gate input:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--hl); }
 .gate button { width: 100%; margin-top: 10px; border: 2px solid var(--ink); background: var(--hl); color: var(--ink); font-weight: 700; font-size: 16px; padding: 13px; border-radius: 12px; }
 .gate .err { color: var(--bad); font-size: 14px; min-height: 1.6em; margin: 8px 0 0; }
+
+/* 주소 #탭으로 열 때 첫 내용이 머리글 뒤에 가려지지 않게 */
+main > section { scroll-margin-top: 200px; }
