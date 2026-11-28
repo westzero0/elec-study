@@ -27,27 +27,64 @@
 
 <header class="top">
   <div class="sub">수포자도 전기기사 딴다 · 공부 도구</div>
-  <h1 id="title">목표 점수표</h1>
+  <h1 id="title">합격 분전반</h1>
 </header>
 
 <main>
-<!-- ===== 1. 목표 점수표 ===== -->
+<!-- ===== 1. 합격 분전반 (책 Part 1 목표 점수표) ===== -->
 <section id="score">
-  <div class="box rule">필기 합격 조건: <b>모든 과목 40점 이상 + 평균 60점 이상 (총점 300점 이상)</b><br>실기는 과락 없이 <b>60점 이상</b>이면 합격입니다.</div>
-  <div class="seg" id="rounds" role="group" aria-label="기록 회차"></div>
-  <div class="box" id="scoreRows"></div>
-  <div class="box result" id="scoreResult"></div>
-  <div class="box">
-    <h2 style="margin:0 0 6px; font-size:16px">기록 한눈에</h2>
-    <table class="hist" id="hist"></table>
+  <div class="box rule">필기 합격 조건: <b>모든 과목 40점 이상 + 평균 60점 이상 (총점 300점 이상)</b><br>과목 5개는 분기 회로, 합격은 메인 투입입니다. 40점 미만 과목은 트립(과락)입니다.</div>
+
+  <div class="panel" aria-live="polite">
+    <div class="ph"><span id="plabel"></span><span id="pstreak"></span></div>
+    <div class="mainrow">
+      <div class="big" id="mainb"><span class="tape">메인</span><span class="sl"><span class="lv"></span></span><span class="led"></span></div>
+      <div><div class="mt" id="mtext"></div><div class="ms" id="msub"></div></div>
+    </div>
+    <div class="brow" id="branches"></div>
+    <p class="memo" id="memo"></p>
+    <div class="samplenote" id="samplenote" hidden><span>지금 보이는 기록은 예시입니다. 첫 기록을 저장하면 사라집니다.</span><button type="button" class="btn" id="clearsample">예시 지우기</button></div>
   </div>
+
+  <form class="box" id="sform" novalidate>
+    <h2 class="bh">점수 기록하기</h2>
+    <p class="muted" style="margin:0">기출이나 모의고사를 풀 때마다 5점 단위로 넣으세요. 다 넣으면 위 분전반에 바로 보입니다.</p>
+    <div class="f2">
+      <label>날짜<input type="date" id="fdate"></label>
+      <label>기록 이름<input type="text" id="fname" placeholder="2024년 1회 기출" maxlength="40"></label>
+    </div>
+    <div class="f5" id="fscores"></div>
+    <p class="err" id="ferr" role="alert"></p>
+    <div class="btns"><button type="submit" class="btn primary">기록 저장</button><button type="button" class="btn" id="fclear">입력 지우기</button></div>
+  </form>
+
   <div class="box">
-    <h2 style="margin:0; font-size:16px">쓰는 법</h2>
-    <ul class="howto">
-      <li>목표 칸 합이 <b>300을 넘게</b> 잡으세요. 딱 300으로 잡으면 실수 한 번에 떨어집니다.</li>
-      <li>모의고사에서 <b>40점 미만인 과목은 빨간색</b>으로 표시됩니다. 그 과목이 다음 주 1순위입니다.</li>
-    </ul>
+    <h2 class="bh">회로별 점검 기록</h2>
+    <p class="muted" style="margin:0">검은 선은 평균, 파란 선은 고른 과목, 점선은 합격선 60입니다.</p>
+    <div class="chips" id="schips"></div>
+    <div class="fig"><svg id="chart" role="img" aria-label="기록별 과목 점수와 평균 추이"></svg></div>
   </div>
+
+  <div class="box">
+    <h2 class="bh">점검 일지</h2>
+    <div id="log"></div>
+  </div>
+
+  <details class="box fold">
+    <summary>내 목표 점수</summary>
+    <p class="muted" style="margin:0">목표 칸 합이 <b>300을 넘게</b> 잡으세요. 딱 300으로 잡으면 실수 한 번에 떨어집니다. 분전반 차단기 아래에 목표가 같이 보입니다.</p>
+    <div class="f5" id="gscores"></div>
+    <p class="gsum" id="gsum"></p>
+  </details>
+
+  <details class="box fold">
+    <summary>기록 백업 (폰 바꿀 때)</summary>
+    <p class="muted" style="margin:0">기록은 이 폰에만 저장됩니다. 폰을 바꾸거나 브라우저 기록을 지우기 전에 내보내 두세요.</p>
+    <div class="btns" style="margin:10px 0"><button type="button" class="btn line" id="exp">파일로 내보내기</button><button type="button" class="btn line" id="copy">코드 복사</button><label class="btn line" for="impFile">파일 불러오기</label><input type="file" id="impFile" accept=".json,.txt,application/json" hidden></div>
+    <textarea id="io" rows="3" aria-label="백업 코드" placeholder="복사한 백업 코드를 여기에 붙여 넣고 불러오기를 누르세요."></textarea>
+    <div class="btns" style="margin-top:8px"><button type="button" class="btn line" id="imp">붙여 넣은 코드 불러오기</button></div>
+    <p class="muted" id="ioerr" role="status" style="margin:6px 0 0"></p>
+  </details>
 </section>
 
 <!-- ===== 2. 26주 계획표 ===== -->
@@ -149,6 +186,8 @@
   </form>
 </dialog>
 
+<div class="toast" id="toast" role="status" hidden><span id="tmsg"></span><button type="button" class="btn" id="tundo" hidden>되돌리기</button></div>
+
 <script src="calc.js"></script>
 <script>
 'use strict';
@@ -177,7 +216,7 @@ $('#gateForm').onsubmit = async e => {
 };
 
 /* ---------- 탭 ---------- */
-const TITLES = { score: '목표 점수표', plan: '26주 계획표', notes: '오답노트', cards: '공식 카드', calc: '계산기 키 순서' };
+const TITLES = { score: '합격 분전반', plan: '26주 계획표', notes: '오답노트', cards: '공식 카드', calc: '계산기 키 순서' };
 function showTab(t) {
   document.querySelectorAll('main > section').forEach(s => s.hidden = s.id !== t);
   document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
@@ -188,54 +227,197 @@ function showTab(t) {
 }
 document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
 
-/* ---------- 1. 목표 점수표 ---------- */
+/* ---------- 1. 합격 분전반 ---------- */
 const SUBJ = ['전기자기학', '전력공학', '전기기기', '회로이론 및 제어공학', '전기설비기술기준(KEC)'];
 const SHORT = ['자기학', '전력', '기기', '회로·제어', 'KEC'];
-const ROUNDS = [['goal', '목표'], ['r1', '1차'], ['r2', '2차'], ['r3', '3차'], ['last', '마지막']];
-const val = (r, i) => { const v = (S.scores[r] || [])[i]; return v === '' || v == null ? null : +v; };
+const z2 = n => String(n).padStart(2, '0');
+const ymd = d => d.getFullYear() + '-' + z2(d.getMonth() + 1) + '-' + z2(d.getDate());
+const r1 = v => Math.round(v * 10) / 10;
+const monday = d => { const x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x; };
+const okRec = r => r && /^\d{4}-\d{2}-\d{2}$/.test(r.date) && Array.isArray(r.sc) && r.sc.length === 5 && r.sc.every(v => Number.isInteger(v) && v >= 0 && v <= 100);
 
-function judge(r) {
-  const v = SUBJ.map((_, i) => val(r, i));
-  const got = v.filter(x => x != null);
-  const total = got.reduce((a, b) => a + b, 0);
-  const low = v.map((x, i) => x != null && x < 40 ? i : -1).filter(i => i >= 0);
-  return { v, got, total, avg: got.length ? total / got.length : null, low, full: got.length === 5 };
+// 예전 점수표(목표·1차·2차·3차·마지막 칸)를 한 번만 옮긴다. 다섯 과목이 다 찬 칸만 기록이 되고, 옛 값은 지우지 않는다.
+if (!S.recs) {
+  S.recs = []; const old = S.scores || {}, today = ymd(new Date());
+  [['r1', '1차 모의'], ['r2', '2차 모의'], ['r3', '3차 모의'], ['last', '시험 전 마지막']].forEach(([k, n], i) => {
+    const sc = (old[k] || []).map(v => v === '' || v == null ? NaN : Math.round(+v));
+    if (sc.length === 5 && sc.every(v => v >= 0 && v <= 100)) S.recs.push({ id: 'm' + k, t: i, date: today, name: n, sc });
+  });
+  S.goal = (old.goal || ['', '', '', '', '']).slice(0, 5);
+  save();
+}
+const SAMPLE = [['2022년 1회 기출', [25, 45, 30, 40, 55]], ['2022년 2회 기출', [30, 50, 35, 45, 60]], ['2022년 3회 기출', [30, 55, 40, 50, 65]],
+  ['2023년 1회 기출', [35, 60, 40, 55, 70]], ['2023년 2회 기출', [35, 65, 45, 60, 75]], ['2023년 3회 기출', [35, 65, 45, 60, 80]], ['CBT 모의고사 1', [35, 70, 45, 60, 80]]]
+  .map(([name, sc], i) => { const d = new Date(); d.setDate(d.getDate() - ((6 - i) * 7 + 5)); return { id: 's' + i, t: i, date: ymd(d), name, sc }; });
+const isSample = () => !S.recs.length && !S.nosample;
+const recs = () => (isSample() ? SAMPLE : S.recs).slice().sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : (a.t || 0) - (b.t || 0));
+
+// 남은 문제 = 과락 과목을 40으로 올리는 문제 수 + 그다음 총점 300까지 모자란 문제 수 (1문제 = 5점)
+function calc(sc) {
+  const fix = sc.reduce((a, s) => a + (s < 40 ? Math.ceil((40 - s) / 5) : 0), 0);
+  const sum = sc.reduce((a, b) => a + b, 0);
+  const rem = Math.max(0, Math.ceil((300 - sum - fix * 5) / 5));
+  const trips = sc.map((s, i) => s < 40 ? i : -1).filter(i => i >= 0);
+  return { sum, avg: sum / 5, need: fix + rem, trips, pass: !trips.length && sum >= 300 };
 }
 
-function renderScore() {
-  $('#rounds').innerHTML = ROUNDS.map(([k, n]) => `<button data-r="${k}" aria-pressed="${S.round === k}">${n}</button>`).join('');
-  const j = judge(S.round);
-  $('#scoreRows').innerHTML = SUBJ.map((s, i) => {
-    const x = j.v[i];
-    return `<div class="srow${x != null && x < 40 ? ' low' : ''}"><label for="s${i}">${s}</label>
-      <span class="flag">${x != null && x < 40 ? '과락' : ''}</span>
-      <input id="s${i}" data-i="${i}" type="number" inputmode="numeric" min="0" max="100" value="${x ?? ''}" placeholder="–"></div>`;
-  }).join('');
-  // 과락이 먼저, 그다음 "남은 과목에 몇 점이 필요한가"
-  const out = [], left = 5 - j.got.length;
-  if (j.low.length) out.push(['no', `불합격 위험 · 과락: ${j.low.map(i => SUBJ[i]).join(', ')} — 40점 미만이면 평균과 상관없이 불합격입니다`]);
-  if (!j.got.length) out.push(['', '점수를 넣으면 합격까지 몇 점이 더 필요한지 알려 드립니다.']);
-  else if (left) {
-    const need = Math.max(40, Math.ceil((300 - j.total) / left));
-    out.push(['need', need > 100 ? `남은 ${left}과목을 다 100점 받아도 총점 300에 모자랍니다.`
-      : `남은 ${left}과목에서 평균 <b>${need}</b>점 이상이면 합격선입니다. <span class="muted">(과목마다 40점 이상)</span>`]);
-  } else if (j.total < 300) out.push(['no', `총점이 ${300 - j.total}점 모자랍니다`]);
-  else if (!j.low.length) out.push(['ok', S.round === 'goal' && j.total === 300 ? '딱 300점입니다. 실수 한 번에 떨어지니 조금 더 높게 잡으세요' : '합격선 안입니다']);
-  $('#scoreResult').innerHTML = `<div><small>총점</small><strong>${j.got.length ? j.total : '–'}</strong> <span class="muted">/ 300 이상</span></div>
-    <div><small>평균</small><strong>${j.avg == null ? '–' : (Math.round(j.avg * 10) / 10)}</strong> <span class="muted">/ 60 이상</span></div>
-    ${out.map(([c, m]) => `<div class="verdict ${c}">${m}</div>`).join('')}`;
-  const cell = (r, i) => { const x = val(r, i); return x == null ? '<td>·</td>' : x < 40 ? `<td class="low"><span>${x}</span></td>` : `<td>${x}</td>`; };
-  $('#hist').innerHTML = `<tr><th>과목</th>${ROUNDS.map(r => `<th>${r[1]}</th>`).join('')}</tr>` +
-    SUBJ.map((_, i) => `<tr><td>${SHORT[i]}</td>${ROUNDS.map(r => cell(r[0], i)).join('')}</tr>`).join('') +
-    `<tr class="tot"><td>총점</td>${ROUNDS.map(r => { const j = judge(r[0]); return `<td>${j.got.length ? j.total : '·'}</td>`; }).join('')}</tr>`;
+const scoreInput = (p, i, v) => `<label>${SHORT[i]}<input type="number" id="${p}${i}" data-i="${i}" min="0" max="100" step="5" inputmode="numeric" placeholder="–" value="${v ?? ''}"></label>`;
+$('#fscores').innerHTML = SUBJ.map((_, i) => scoreInput('s', i)).join('');
+$('#gscores').innerHTML = SUBJ.map((_, i) => scoreInput('g', i, S.goal[i])).join('');
+$('#fdate').value = ymd(new Date());
+const parse = v => { if (v.trim() === '') return null; const n = +v; return Number.isInteger(n) && n >= 0 && n <= 100 && n % 5 === 0 ? n : NaN; };
+const readForm = () => { const vals = SUBJ.map((_, i) => parse($('#s' + i).value)); return { vals, full: vals.every(v => v != null && !Number.isNaN(v)) }; };
+
+let sel = null;
+function brk(i, v) {
+  const g = S.goal[i] === '' || S.goal[i] == null ? '' : `<em>목표 ${esc(S.goal[i])}</em>`;
+  const c = v == null ? 'none' : v < 40 ? 'trip' : v < 50 ? 'warn' : 'on';
+  return `<div class="b ${c}" title="${SUBJ[i]}"><span class="tape">${SHORT[i]}</span><span class="sl"><span class="lv"></span></span><span class="led"></span>
+    <b class="num">${v ?? '–'}</b><small>${{ none: '대기', trip: '트립', warn: '주의', on: 'ON' }[c]}</small>${g}</div>`;
 }
-$('#rounds').onclick = e => { const b = e.target.closest('button'); if (b) { S.round = b.dataset.r; save(); renderScore(); } };
-$('#scoreRows').addEventListener('change', e => {
+function streak() {
+  const set = new Set(S.recs.map(r => ymd(monday(new Date(r.date + 'T00:00:00'))))), c = monday(new Date());
+  if (!set.has(ymd(c))) c.setDate(c.getDate() - 7);
+  let n = 0; while (set.has(ymd(c))) { n++; c.setDate(c.getDate() - 7); } return n;
+}
+function renderPanel() {
+  const f = readForm(), L = recs().at(-1); let sc = null, label = '기록 없음';
+  if (f.full) { sc = f.vals; label = '입력 중인 점수 미리보기'; } else if (L) { sc = L.sc; label = '최근 기록 · ' + L.name; }
+  $('#plabel').textContent = label;
+  const n = streak(); $('#pstreak').textContent = n ? `주간 정기점검 ${n}주 연속` : '이번 주 점검 전';
+  $('#branches').innerHTML = SUBJ.map((_, i) => brk(i, sc ? sc[i] : null)).join('');
+  if (!sc) { $('#mainb').className = 'big trip'; $('#mtext').textContent = '첫 점수를 기록하세요'; $('#msub').textContent = '과목별 점수를 넣으면 분전반이 켜집니다'; return; }
+  const c = calc(sc); $('#mainb').className = 'big ' + (c.pass ? 'on' : 'trip');
+  $('#mtext').innerHTML = c.pass ? '메인 투입 완료' : `메인 투입까지 <span class="nw"><span class="num">${c.need}</span>문제</span>`;
+  $('#msub').textContent = `평균 ${r1(c.avg)}점 · ` + (c.trips.length ? `트립 회로 ${c.trips.length}개` : '모든 회로 ON');
+}
+function memo() {
+  const R = recs(); if (!R.length) return '첫 점수를 기록하면 점검 메모가 나옵니다.';
+  const L = R.at(-1), c = calc(L.sc); let m;
+  if (c.pass) {
+    let run = 0; for (let i = R.length - 1; i >= 0 && calc(R[i].sc).pass; i--) run++;
+    m = run >= 3 ? `${run}회 연속 메인 투입. 안정권입니다. 실기 준비를 시작해도 좋습니다.` : `메인 투입. ${3 - run}회 더 유지하면 안정권입니다.`;
+  } else if (c.trips.length) {
+    let best = c.trips[0], bk = 0;
+    c.trips.forEach(i => { let k = 0; for (let j = R.length - 1; j >= 0 && R[j].sc[i] < 40; j--) k++; if (k > bk) { bk = k; best = i; } });
+    m = `회로 ${best + 1}(${SUBJ[best]}) ${bk > 1 ? bk + '회 연속 ' : ''}트립. ${Math.ceil((40 - L.sc[best]) / 5)}문제만 더 맞히면 복구됩니다. 이번 주 1순위입니다.`;
+  } else {
+    const lo = L.sc.indexOf(Math.min(...L.sc));
+    m = `모든 회로 ON. 메인 투입까지 ${c.need}문제 남았습니다. 점수가 가장 낮은 ${SUBJ[lo]}부터 올려 보세요.`;
+  }
+  if (R.length > 1) { const d = calc(R.at(-2).sc).need - c.need; if (d > 0) m += ` 지난 기록보다 ${d}문제 가까워졌습니다.`; else if (d < 0) m += ` 지난 기록보다 ${-d}문제 멀어졌습니다.`; }
+  return m;
+}
+let logAll = false;
+function renderLog() {
+  const R = recs().reverse(), show = logAll ? R : R.slice(0, 5);
+  $('#log').innerHTML = !R.length ? '<p class="muted">아직 기록이 없습니다.</p>' : show.map(r => {
+    const c = calc(r.sc);
+    return `<div class="lrow"><div class="lh"><b>${esc(r.name)}</b><span class="muted num">${esc(r.date.replace(/-/g, '.'))}</span></div>
+      <div class="lsc">${r.sc.map((v, i) => `<span class="${v < 40 ? 'low' : ''}"><small>${SHORT[i]}</small><span class="num">${v}</span></span>`).join('')}</div>
+      <div class="lf"><span>평균 <span class="num">${r1(c.avg)}</span> · ${c.pass ? '메인 투입' : `남은 <span class="num">${c.need}</span>문제`}</span>${isSample() ? '' : `<button type="button" class="btn danger del" data-id="${esc(r.id)}">삭제</button>`}</div></div>`;
+  }).join('') + (R.length > 5 ? `<button type="button" class="btn line more" id="logMore">${logAll ? '최근 5개만 보기' : `전체 ${R.length}개 보기`}</button>` : '');
+}
+function renderChips() {
+  const L = recs().at(-1); if (sel === null) sel = L ? L.sc.indexOf(Math.min(...L.sc)) : 0;
+  $('#schips').innerHTML = SHORT.map((s, i) => `<button type="button" data-i="${i}" aria-pressed="${i === sel}">${s}</button>`).join('');
+}
+function renderGoal() {
+  const g = S.goal.map(v => v === '' || v == null ? null : +v), got = g.filter(v => v != null), sum = got.reduce((a, b) => a + b, 0);
+  const el = $('#gsum');
+  if (got.length < 5) { el.className = 'gsum'; el.innerHTML = got.length ? `지금까지 <span class="num">${sum}</span>점 · 다섯 과목을 다 넣으면 판정합니다` : ''; return; }
+  const low = g.some(v => v < 40);
+  el.className = 'gsum ' + (low || sum < 300 ? 'no' : sum === 300 ? 'need' : 'ok');
+  el.innerHTML = `총점 <span class="num">${sum}</span> · ` + (low ? '40점 미만 과목이 있으면 목표로도 불합격입니다' : sum < 300 ? `300점에 ${300 - sum}점 모자랍니다` : sum === 300 ? '딱 300점입니다. 조금 더 높게 잡으세요' : '합격선 위로 잘 잡았습니다');
+}
+const svg = $('#chart');
+function draw() {
+  const R = recs(), W = svg.clientWidth, H = svg.clientHeight; if (!W || !H) return;
+  if (!R.length) { svg.innerHTML = `<text x="${W / 2}" y="${H / 2}" text-anchor="middle">기록이 생기면 그래프가 그려집니다</text>`; return; }
+  const m = { l: 30, r: 62, t: 12, b: 26 }, iw = W - m.l - m.r, ih = H - m.t - m.b, n = R.length;
+  const X = i => m.l + (n === 1 ? iw / 2 : iw * i / (n - 1)), Y = v => m.t + ih * (1 - v / 100);
+  const pl = (vals, c, w) => `<polyline fill="none" stroke="${c}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round" points="${vals.map((v, i) => X(i).toFixed(1) + ',' + Y(v).toFixed(1)).join(' ')}"/>`;
+  let g = `<rect x="${m.l}" y="${Y(40)}" width="${iw}" height="${Y(0) - Y(40)}" fill="var(--bad-soft)"/>`;
+  [0, 20, 40, 60, 80, 100].forEach(v => { g += `<line x1="${m.l}" x2="${m.l + iw}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${m.l - 6}" y="${Y(v) + 4}" text-anchor="end">${v}</text>`; });
+  g += `<line x1="${m.l}" x2="${m.l + iw}" y1="${Y(40)}" y2="${Y(40)}" stroke="var(--bad)" stroke-width="1.5"/><line x1="${m.l}" x2="${m.l + iw}" y1="${Y(60)}" y2="${Y(60)}" stroke="var(--ink)" stroke-width="1.2" stroke-dasharray="5 4"/>`;
+  const step = Math.ceil(n / Math.max(1, Math.floor(iw / 44)));
+  R.forEach((r, i) => { if (i % step && i !== n - 1) return; g += `<text x="${X(i)}" y="${H - 6}" text-anchor="middle">${md(r.date)}</text>`; });
+  SUBJ.forEach((_, k) => { if (k !== sel) g += pl(R.map(r => r.sc[k]), 'var(--g3)', 1.5); });
+  const av = R.map(r => calc(r.sc).avg), sv = R.map(r => r.sc[sel]);
+  g += pl(av, 'var(--ink)', 3) + pl(sv, 'var(--sel)', 3);
+  sv.forEach((v, i) => { g += `<circle cx="${X(i)}" cy="${Y(v)}" r="4" fill="${v < 40 ? 'var(--bad)' : 'var(--sel)'}"/>`; });
+  av.forEach((v, i) => { g += `<circle cx="${X(i)}" cy="${Y(v)}" r="3.5" fill="var(--ink)"/>`; });
+  let ya = Y(av.at(-1)) + 4, ys = Y(sv.at(-1)) + 4; if (Math.abs(ya - ys) < 16) { if (ya < ys) { ya -= 8; ys += 8; } else { ya += 8; ys -= 8; } }
+  const ex = X(n - 1) + 8;
+  g += `<text x="${ex}" y="${ya}" class="k">평균 ${r1(av.at(-1))}</text><text x="${ex}" y="${ys}" class="s">${SHORT[sel]} ${sv.at(-1)}</text>`;
+  g += `<text x="${m.l + iw / 2}" y="${Y(0) - 8}" text-anchor="middle" class="r">과락 구역</text>`;
+  svg.innerHTML = g;
+}
+new ResizeObserver(draw).observe(svg);
+function renderScore() { renderPanel(); $('#memo').textContent = memo(); $('#samplenote').hidden = !isSample(); renderLog(); renderChips(); renderGoal(); draw(); }
+
+let toastT = null, undoFn = null;
+function toast(msg, undo) {
+  $('#tmsg').textContent = msg; undoFn = undo || null; $('#tundo').hidden = !undo; $('#toast').hidden = false;
+  clearTimeout(toastT); toastT = setTimeout(() => { $('#toast').hidden = true; undoFn = null; }, 6000);
+}
+$('#tundo').onclick = () => { if (undoFn) undoFn(); undoFn = null; $('#toast').hidden = true; };
+
+$('#sform').addEventListener('input', e => { e.target.classList.remove('bad'); $('#ferr').textContent = ''; renderPanel(); });
+$('#sform').addEventListener('submit', e => {
+  e.preventDefault(); const f = readForm(); let bad = false;
+  f.vals.forEach((v, i) => { if (v == null || Number.isNaN(v)) { $('#s' + i).classList.add('bad'); bad = true; } });
+  if (!$('#fdate').value) { $('#fdate').classList.add('bad'); bad = true; }
+  if (bad) { $('#ferr').textContent = '다섯 과목 점수를 0~100 사이, 5점 단위로 모두 넣으세요.'; return; }
+  const now = Date.now();
+  S.recs.push({ id: 'r' + now, t: now, date: $('#fdate').value, name: $('#fname').value.trim() || `${S.recs.length + 1}번째 기록`, sc: f.vals });
+  S.nosample = true; save();
+  SUBJ.forEach((_, i) => $('#s' + i).value = ''); $('#fname').value = ''; sel = null; renderScore();
+  const c = calc(f.vals); toast(c.pass ? '기록했습니다. 메인 투입입니다.' : `기록했습니다. 메인 투입까지 ${c.need}문제.`);
+});
+$('#fclear').onclick = () => { SUBJ.forEach((_, i) => { $('#s' + i).value = ''; $('#s' + i).classList.remove('bad'); }); $('#ferr').textContent = ''; renderPanel(); };
+$('#clearsample').onclick = () => { S.nosample = true; save(); sel = null; renderScore(); };
+$('#schips').onclick = e => { const b = e.target.closest('button'); if (b) { sel = +b.dataset.i; renderChips(); draw(); } };
+$('#log').onclick = e => {
+  if (e.target.id === 'logMore') { logAll = !logAll; renderLog(); return; }
+  const b = e.target.closest('.del'); if (!b) return;
+  const i = S.recs.findIndex(r => r.id === b.dataset.id); if (i < 0) return;
+  const [gone] = S.recs.splice(i, 1); save(); renderScore();
+  toast('기록을 지웠습니다.', () => { S.recs.push(gone); save(); renderScore(); });
+};
+$('#gscores').addEventListener('change', e => {
   const i = +e.target.dataset.i; let v = e.target.value;
   if (v !== '') v = String(Math.max(0, Math.min(100, Math.round(+v))));
-  (S.scores[S.round] ||= ['', '', '', '', ''])[i] = v;
-  save(); renderScore();
+  e.target.value = v; S.goal[i] = v; save(); renderScore();
 });
+
+const backup = () => JSON.stringify({ app: 'supo-panel', v: 1, records: S.recs });
+$('#exp').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([backup()], { type: 'application/json' }));
+  a.download = `전기기사_점검일지_${ymd(new Date())}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  $('#ioerr').textContent = `기록 ${S.recs.length}개를 파일로 내보냈습니다. 굿노트나 드라이브에 보관하세요.`;
+};
+$('#copy').onclick = () => {
+  const v = backup(); $('#io').value = v;
+  navigator.clipboard.writeText(v).then(() => { $('#ioerr').textContent = `기록 ${S.recs.length}개를 백업 코드로 복사했습니다. 메모 앱에 붙여 넣어 두세요.`; },
+    () => { $('#io').select(); $('#ioerr').textContent = '복사가 막혀 있습니다. 칸에 나온 코드를 직접 복사하세요.'; });
+};
+function importText(t) {
+  let p; try { p = JSON.parse(t); } catch (e) { $('#ioerr').textContent = '백업 코드를 읽을 수 없습니다. 내보낸 코드를 그대로 붙여 넣으세요.'; return; }
+  const good = ((Array.isArray(p) ? p : p && p.records) || []).filter(okRec);
+  if (!good.length) { $('#ioerr').textContent = '불러올 기록이 없습니다.'; return; }
+  const before = S.recs.slice(), ids = new Set(S.recs.map(r => r.id)); let added = 0;
+  good.forEach((r, k) => {
+    const id = typeof r.id === 'string' && r.id ? r.id : 'i' + Date.now() + k; if (ids.has(id)) return; ids.add(id); added++;
+    S.recs.push({ id, t: +r.t || k, date: r.date, name: typeof r.name === 'string' && r.name ? r.name.slice(0, 40) : '불러온 기록', sc: r.sc.slice() });
+  });
+  S.nosample = true; save(); sel = null; renderScore();
+  $('#ioerr').textContent = `기록 ${added}개를 불러왔습니다.` + (added < good.length ? ` (이미 있는 ${good.length - added}개는 건너뜀)` : '');
+  if (added) toast(`기록 ${added}개를 불러왔습니다.`, () => { S.recs = before; save(); renderScore(); });
+}
+$('#imp').onclick = () => importText($('#io').value);
+$('#impFile').onchange = e => { const f = e.target.files[0]; if (f) f.text().then(importText); e.target.value = ''; };
 
 /* ---------- 2. 26주 계획표 (책 부록 1 그대로) ---------- */
 const WEEKS = [
