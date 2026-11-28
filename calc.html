@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F6F4EE">
+<meta name="description" content="전기기사 계산 문제, 공학용 계산기(fx-570ES PLUS)로 누르는 순서를 한 단계씩. SOLVE와 복소수 모드 무료 공개.">
+<link rel="icon" href="icon-192.png">
+<title>전기기사 계산기 키 순서 · SOLVE·복소수 (무료)</title>
+<link rel="stylesheet" href="app.css">
+<style>body { padding-bottom: 32px; }</style>
+</head>
+<body>
+<header class="top">
+  <div class="sub">수포자도 전기기사 딴다 · 무료 공개</div>
+  <h1>계산기 키 순서</h1>
+</header>
+<main>
+  <p class="muted" style="margin:0 2px 12px">식은 아는데 계산기에서 막힐 때, 누를 키를 한 단계씩 따라 하세요. 단계마다 그때 화면에 보여야 하는 값이 같이 나옵니다.</p>
+  <div id="calcRoot"></div>
+  <div class="cta">
+    <p><b>자주 나오는 계산 10문제 전체</b>와 목표 점수표·26주 계획표·오답노트·공식 카드는 전자책 「수포자도 전기기사 딴다」 구매자용 폰 도구에 들어 있습니다.</p>
+    <p class="muted" style="color:#CFCabe">비전공·수포자로 2024년 한 해에 전기기사·산업기사·기능사를 딴 저자가 실제로 밟은 순서와 직접 만든 양식입니다.</p>
+    <a href="https://litt.ly/bes5776/sale/1tSJygu">전자책 보러 가기</a>
+  </div>
+</main>
+<script src="calc.js"></script>
+<script>calcApp(document.getElementById('calcRoot'), CALC.filter(p => p.free), { free: true });</script>
+</body>
+</html>

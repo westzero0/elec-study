@@ -3,183 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1D5BA8">
+<meta name="theme-color" content="#F6F4EE">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="전기기사 도구">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <title>수포자도 전기기사 딴다 · 공부 도구</title>
-<style>
-@font-face { font-family: "Pre"; src: url("fonts/pre-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "Pre"; src: url("fonts/pre-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
-:root {
-  --acc: #1D5BA8; --acc-soft: #E3EBF5; --ink: #1E1E1E; --g1: #4A4A4A; --g2: #6B6B6B;
-  --g3: #D9D6D0; --line: #E4E2DD; --paper: #F1F3F6; --bad: #C8312B; --bad-soft: #FBEAEA;
-}
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
-body { word-break: keep-all; overflow-wrap: break-word; margin: 0; background: var(--paper); color: var(--ink);
-  font: 16px/1.6 "Pre", "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
-h1, h2, h3, h4 { text-wrap: balance; }
-p, li, dd { text-wrap: pretty; }
-button, input, textarea, select { font: inherit; color: inherit; }
-button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
-[hidden] { display: none !important; }
-
-.top { position: sticky; top: 0; z-index: 5; background: #fff; border-bottom: 1px solid var(--line);
-  padding: calc(10px + env(safe-area-inset-top)) 18px 10px; }
-.top h1 { margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -0.01em; }
-.top .sub { font-size: 12px; color: var(--acc); font-weight: 700; letter-spacing: 0.08em; }
-main { max-width: 560px; margin: 0 auto; padding: 16px 14px 24px; }
-section h2 { font-size: 20px; margin: 4px 2px 12px; letter-spacing: -0.02em; }
-
-.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; display: grid; grid-template-columns: repeat(4, 1fr);
-  background: #fff; border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); }
-.tabs button { border: 0; background: none; padding: 9px 2px 10px; font-size: 13px; color: var(--g2); white-space: nowrap; }
-.tabs button b { display: block; width: 22px; height: 3px; border-radius: 2px; margin: 0 auto 6px; background: transparent; }
-.tabs button[aria-selected="true"] { color: var(--acc); font-weight: 700; }
-.tabs button[aria-selected="true"] b { background: var(--acc); }
-
-.box { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
-.rule { background: var(--acc-soft); border: 0; color: var(--ink); font-size: 14px; }
-.rule b { color: var(--acc); }
-.muted { color: var(--g2); font-size: 13px; }
-.howto { font-size: 14px; color: var(--g1); padding-left: 20px; margin: 6px 0 0; }
-.howto li { margin-bottom: 4px; }
-
-/* 점수표 */
-.seg { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; background: #fff; border: 1px solid var(--line);
-  border-radius: 12px; padding: 4px; margin-bottom: 12px; }
-.seg button { border: 0; background: none; border-radius: 9px; padding: 8px 0; font-size: 14px; white-space: nowrap; color: var(--g1); }
-.seg button[aria-pressed="true"] { background: var(--acc); color: #fff; font-weight: 700; }
-.srow { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
-.srow:last-child { border-bottom: 0; }
-.srow label { flex: 1; font-size: 15px; }
-.srow input { width: 76px; text-align: center; font-size: 20px; font-weight: 700; padding: 6px 4px; border: 1.5px solid var(--g3);
-  border-radius: 10px; background: #fff; }
-.srow input:focus { outline: none; border-color: var(--acc); }
-.srow.low input { border-color: var(--bad); color: var(--bad); background: var(--bad-soft); }
-.srow .flag { width: 44px; font-size: 12px; font-weight: 700; color: var(--bad); white-space: nowrap; }
-.result { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.result div { background: var(--paper); border-radius: 10px; padding: 10px 12px; }
-.result small { display: block; font-size: 12px; color: var(--g2); }
-.result strong { font-size: 24px; letter-spacing: -0.02em; }
-.verdict { grid-column: 1 / -1; font-weight: 700; font-size: 15px; }
-.verdict.ok { background: var(--acc-soft) !important; color: var(--acc); }
-.verdict.no { background: var(--bad-soft) !important; color: var(--bad); }
-.hist { width: 100%; border-collapse: collapse; font-size: 13px; }
-.hist th, .hist td { padding: 6px 2px; text-align: center; border-bottom: 1px solid var(--line); }
-.hist th { color: var(--g2); font-weight: 400; font-size: 12px; }
-.hist td:first-child, .hist th:first-child { text-align: left; white-space: nowrap; }
-.hist td.low { color: var(--bad); font-weight: 700; }
-.hist td.low span { border: 1.5px solid var(--bad); border-radius: 50%; padding: 0 4px; }
-.hist tr.tot td { font-weight: 700; border-bottom: 0; }
-
-/* 계획표 */
-.dday { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.dday strong { font-size: 30px; color: var(--acc); letter-spacing: -0.02em; }
-.field { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 14px; }
-.field input[type=date] { flex: 1; padding: 8px 10px; border: 1.5px solid var(--g3); border-radius: 10px; background: #fff; }
-.week { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; background: #fff; border: 1px solid var(--line);
-  border-radius: 12px; margin-bottom: 8px; }
-.week .wk { width: 58px; flex: none; font-weight: 700; color: var(--acc); white-space: nowrap; font-size: 15px; }
-.week .tx { flex: 1; font-size: 14px; color: var(--g1); }
-.week.exam { background: var(--acc-soft); border-color: transparent; }
-.week.now { border: 2px solid var(--acc); }
-.week.now .wk::after { content: "지금"; display: block; font-size: 11px; color: #fff; background: var(--acc); border-radius: 4px;
-  width: max-content; padding: 0 5px; margin-top: 3px; }
-.week.done .tx { color: var(--g2); text-decoration: line-through; text-decoration-color: var(--g3); }
-.ck { width: 28px; height: 28px; flex: none; accent-color: var(--acc); margin: 0; }
-.bar { height: 6px; background: var(--paper); border-radius: 3px; overflow: hidden; margin-top: 8px; }
-.bar i { display: block; height: 100%; background: var(--acc); }
-
-/* 오답노트 */
-.chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 10px; scrollbar-width: none; }
-.chips button { border: 1px solid var(--g3); background: #fff; border-radius: 999px; padding: 6px 13px; font-size: 14px; white-space: nowrap; }
-.chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
-.toggle { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--g1); margin-bottom: 10px; }
-.toggle input { width: 20px; height: 20px; accent-color: var(--acc); }
-.note { display: flex; gap: 12px; width: 100%; text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 12px;
-  padding: 10px; margin-bottom: 8px; }
-.note img, .note .noimg { width: 72px; height: 72px; flex: none; border-radius: 8px; object-fit: cover; background: var(--paper); }
-.note .noimg { display: grid; place-items: center; color: var(--g2); font-size: 12px; }
-.note .meta { font-size: 12px; color: var(--g2); }
-.note .tag { color: var(--acc); font-weight: 700; margin-right: 6px; }
-.note .q { font-size: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.note.done { opacity: 0.55; }
-.note.done .q { text-decoration: line-through; }
-.dots { font-size: 12px; color: var(--g2); margin-top: 2px; }
-.dots i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--acc); margin-right: 3px; vertical-align: -1px; }
-.dots i.on { background: var(--acc); }
-.weak { font-size: 14px; }
-.weak b { color: var(--acc); }
-.empty { text-align: center; color: var(--g2); padding: 30px 10px; font-size: 14px; }
-.fab { position: fixed; right: 18px; bottom: calc(78px + env(safe-area-inset-bottom)); z-index: 4; border: 0; background: var(--acc); color: #fff;
-  border-radius: 999px; padding: 14px 20px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 14px rgba(29,91,168,0.35); white-space: nowrap; }
-
-dialog { border: 0; padding: 0; width: 100%; max-width: 560px; max-height: 100%; height: 100%; margin: 0 auto; background: var(--paper); }
-dialog::backdrop { background: rgba(0,0,0,0.3); }
-.dhead { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; background: #fff;
-  border-bottom: 1px solid var(--line); padding: calc(10px + env(safe-area-inset-top)) 12px 10px; }
-.dhead h2 { margin: 0; font-size: 17px; }
-.btn { border: 0; background: none; padding: 8px 10px; font-size: 15px; color: var(--g1); white-space: nowrap; }
-.btn.primary { background: var(--acc); color: #fff; border-radius: 10px; font-weight: 700; padding: 8px 16px; }
-.btn.danger { color: var(--bad); }
-.form { padding: 14px; }
-.card { background: #fff; border: 1.5px solid var(--ink); border-radius: 12px; overflow: hidden; }
-.card .row { padding: 12px 14px; border-bottom: 1px solid var(--line); }
-.card .row:last-child { border-bottom: 0; }
-.card .head { background: var(--paper); }
-.lab { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
-.opts { display: flex; flex-wrap: wrap; gap: 6px; }
-.opts label { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--g3); background: #fff; border-radius: 999px;
-  padding: 6px 12px; font-size: 14px; white-space: nowrap; }
-.opts label:has(input:checked) { border-color: var(--acc); background: var(--acc-soft); color: var(--acc); font-weight: 700; }
-.opts input { accent-color: var(--acc); margin: 0; width: 16px; height: 16px; }
-.src { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-size: 15px; }
-.src input { width: 58px; padding: 6px; text-align: center; border: 1.5px solid var(--g3); border-radius: 8px; background: #fff; }
-.src input[type=date] { width: auto; }
-.card textarea { width: 100%; min-height: 64px; border: 1.5px solid var(--g3); border-radius: 8px; padding: 8px 10px; resize: vertical; background: #fff; }
-.card textarea:focus, .src input:focus { outline: none; border-color: var(--acc); }
-.photo { display: block; width: 100%; max-height: 360px; object-fit: contain; border-radius: 8px; background: var(--paper); margin-bottom: 8px; }
-.pbtns { display: flex; gap: 8px; }
-.pbtns label, .pbtns button { flex: 1; text-align: center; border: 1.5px dashed var(--acc); color: var(--acc); background: #fff;
-  border-radius: 10px; padding: 12px 6px; font-weight: 700; font-size: 14px; white-space: nowrap; }
-.pbtns input { display: none; }
-.retry .opts label { flex-direction: column; gap: 2px; border-radius: 10px; padding: 8px 14px; }
-.retry small { font-size: 11px; font-weight: 400; color: var(--g2); }
-
-/* 공식 카드 */
-.fcard { position: relative; background: #fff; border: 1.5px solid var(--ink); border-radius: 16px; min-height: 300px; padding: 22px 20px;
-  display: flex; flex-direction: column; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
-.fcard .cat { font-size: 13px; font-weight: 700; color: var(--acc); letter-spacing: 0.06em; }
-.fcard .txt { flex: 1; display: flex; align-items: center; font-size: 20px; line-height: 1.9; padding: 18px 0; }
-.fcard .txt p { margin: 0; }
-.fcard .hole { display: inline-block; min-width: 3.2em; border-bottom: 2px solid var(--acc); background: var(--acc-soft); border-radius: 4px;
-  color: transparent; padding: 0 4px; line-height: 1.4; }
-.fcard.open .hole { color: var(--acc); font-weight: 700; background: transparent; }
-.fcard .hint { font-size: 13px; color: var(--g2); text-align: center; }
-.fcard.known { border-color: var(--acc); }
-.fcard.known::after { content: "외웠어요"; position: absolute; top: 18px; right: 18px; font-size: 12px; font-weight: 700; color: #fff;
-  background: var(--acc); border-radius: 6px; padding: 1px 8px; }
-.fnav { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 8px; margin-top: 12px; }
-.fnav button { border: 1px solid var(--g3); background: #fff; border-radius: 12px; padding: 12px 4px; font-size: 15px; white-space: nowrap; }
-.fnav .mid[aria-pressed="true"] { background: var(--acc); border-color: var(--acc); color: #fff; font-weight: 700; }
-.count { text-align: center; font-size: 13px; color: var(--g2); margin-top: 10px; }
-
-/* 접속 코드 */
-.gate { position: fixed; inset: 0; z-index: 20; background: var(--paper); display: flex; align-items: center; justify-content: center; padding: 24px; }
-.gate form { width: 100%; max-width: 360px; }
-.gate .sub { font-size: 12px; color: var(--acc); font-weight: 700; letter-spacing: 0.12em; }
-.gate h1 { font-size: 26px; margin: 6px 0 14px; line-height: 1.35; letter-spacing: -0.02em; }
-.gate input { width: 100%; font-size: 20px; padding: 12px 14px; border: 1.5px solid var(--g3); border-radius: 12px; background: #fff;
-  text-align: center; letter-spacing: 0.1em; text-transform: uppercase; }
-.gate input:focus { outline: none; border-color: var(--acc); }
-.gate button { width: 100%; margin-top: 10px; border: 0; background: var(--acc); color: #fff; font-weight: 700; font-size: 16px; padding: 14px; border-radius: 12px; }
-.gate .err { color: var(--bad); font-size: 14px; min-height: 1.6em; margin: 8px 0 0; }
-</style>
+<link rel="stylesheet" href="app.css">
 </head>
 <body>
 
@@ -202,7 +33,7 @@ dialog::backdrop { background: rgba(0,0,0,0.3); }
 <main>
 <!-- ===== 1. 목표 점수표 ===== -->
 <section id="score">
-  <div class="box rule">필기 합격 조건: <b>모든 과목 40점 이상 + 평균 60점 이상 (총점 300점 이상)</b></div>
+  <div class="box rule">필기 합격 조건: <b>모든 과목 40점 이상 + 평균 60점 이상 (총점 300점 이상)</b><br>실기는 과락 없이 <b>60점 이상</b>이면 합격입니다.</div>
   <div class="seg" id="rounds" role="group" aria-label="기록 회차"></div>
   <div class="box" id="scoreRows"></div>
   <div class="box result" id="scoreResult"></div>
@@ -228,6 +59,14 @@ dialog::backdrop { background: rgba(0,0,0,0.3); }
     <div class="bar"><i id="planBar" style="width:0"></i></div>
     <p class="muted" id="planCount" style="margin:4px 0 0"></p>
   </div>
+  <div class="box" id="prac">
+    <h2 style="margin:0; font-size:16px">필기 합격 뒤 실기 일정</h2>
+    <p class="muted" style="margin:2px 0 0">날짜는 해마다 달라요. 큐넷 시행 일정에서 확인해 넣으세요.</p>
+    <label class="field"><span>필기 합격 발표일</span><input type="date" data-k="pass"></label>
+    <label class="field"><span>실기 원서접수 시작</span><input type="date" data-k="apply"></label>
+    <label class="field"><span>실기 시험일</span><input type="date" data-k="prac"></label>
+    <ul class="dlist" id="pracList"></ul>
+  </div>
   <div id="weeks"></div>
 </section>
 
@@ -242,6 +81,9 @@ dialog::backdrop { background: rgba(0,0,0,0.3); }
 
 <!-- ===== 4. 공식 카드 ===== -->
 <section id="cards" hidden>
+  <div class="seg two" id="cmode" role="group" aria-label="카드 모드">
+    <button data-m="hole">빈칸 외우기</button><button data-m="cond">조건 → 공식</button>
+  </div>
   <div class="chips" id="cardFilter"></div>
   <label class="toggle"><input type="checkbox" id="onlyUnknown"> 못 외운 것만 보기</label>
   <div class="fcard" id="fcard" role="button" tabindex="0" aria-label="눌러서 정답 보기">
@@ -257,6 +99,9 @@ dialog::backdrop { background: rgba(0,0,0,0.3); }
   <p class="count" id="fcount"></p>
   <p class="muted" style="text-align:center">책 부록 2 「시험장 덤프용 공식 한 장」의 내용입니다.</p>
 </section>
+
+<!-- ===== 5. 계산기 키 순서 (책 Part 2·3) ===== -->
+<section id="calc" hidden><div id="calcRoot"></div></section>
 </main>
 
 <nav class="tabs" role="tablist">
@@ -264,6 +109,7 @@ dialog::backdrop { background: rgba(0,0,0,0.3); }
   <button role="tab" data-tab="plan" aria-selected="false"><b></b>계획표</button>
   <button role="tab" data-tab="notes" aria-selected="false"><b></b>오답노트</button>
   <button role="tab" data-tab="cards" aria-selected="false"><b></b>공식 카드</button>
+  <button role="tab" data-tab="calc" aria-selected="false"><b></b>계산기</button>
 </nav>
 
 <!-- 오답 편집 (책 Part 5 양식과 같은 항목) -->
@@ -303,6 +149,7 @@ dialog::backdrop { background: rgba(0,0,0,0.3); }
   </form>
 </dialog>
 
+<script src="calc.js"></script>
 <script>
 'use strict';
 const $ = s => document.querySelector(s);
@@ -310,7 +157,7 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '
 
 /* ---------- 저장 (이 폰에만) ---------- */
 const KEY = 'supo-v1';
-const S = Object.assign({ scores: {}, round: 'goal', exam: '', weeks: [], known: [] }, JSON.parse(localStorage.getItem(KEY) || '{}'));
+const S = Object.assign({ scores: {}, round: 'goal', exam: '', weeks: [], known: [], pass: '', apply: '', prac: '', cmode: 'hole' }, JSON.parse(localStorage.getItem(KEY) || '{}'));
 const save = () => localStorage.setItem(KEY, JSON.stringify(S));
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist();
 
@@ -330,7 +177,7 @@ $('#gateForm').onsubmit = async e => {
 };
 
 /* ---------- 탭 ---------- */
-const TITLES = { score: '목표 점수표', plan: '26주 계획표', notes: '오답노트', cards: '공식 카드' };
+const TITLES = { score: '목표 점수표', plan: '26주 계획표', notes: '오답노트', cards: '공식 카드', calc: '계산기 키 순서' };
 function showTab(t) {
   document.querySelectorAll('main > section').forEach(s => s.hidden = s.id !== t);
   document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
@@ -364,14 +211,19 @@ function renderScore() {
       <span class="flag">${x != null && x < 40 ? '과락' : ''}</span>
       <input id="s${i}" data-i="${i}" type="number" inputmode="numeric" min="0" max="100" value="${x ?? ''}" placeholder="–"></div>`;
   }).join('');
-  let msg, cls = '';
-  if (!j.full) msg = `5과목 점수를 넣으면 합격선을 알려 드립니다. (${j.got.length}/5)`;
-  else if (j.low.length) { cls = 'no'; msg = `과락: ${j.low.map(i => SUBJ[i]).join(', ')} — 40점 미만`; }
-  else if (j.total < 300) { cls = 'no'; msg = `총점이 ${300 - j.total}점 모자랍니다`; }
-  else { cls = 'ok'; msg = S.round === 'goal' && j.total === 300 ? '딱 300점입니다. 실수 한 번에 떨어지니 조금 더 높게 잡으세요' : '합격선 안입니다'; }
+  // 과락이 먼저, 그다음 "남은 과목에 몇 점이 필요한가"
+  const out = [], left = 5 - j.got.length;
+  if (j.low.length) out.push(['no', `불합격 위험 · 과락: ${j.low.map(i => SUBJ[i]).join(', ')} — 40점 미만이면 평균과 상관없이 불합격입니다`]);
+  if (!j.got.length) out.push(['', '점수를 넣으면 합격까지 몇 점이 더 필요한지 알려 드립니다.']);
+  else if (left) {
+    const need = Math.max(40, Math.ceil((300 - j.total) / left));
+    out.push(['need', need > 100 ? `남은 ${left}과목을 다 100점 받아도 총점 300에 모자랍니다.`
+      : `남은 ${left}과목에서 평균 <b>${need}</b>점 이상이면 합격선입니다. <span class="muted">(과목마다 40점 이상)</span>`]);
+  } else if (j.total < 300) out.push(['no', `총점이 ${300 - j.total}점 모자랍니다`]);
+  else if (!j.low.length) out.push(['ok', S.round === 'goal' && j.total === 300 ? '딱 300점입니다. 실수 한 번에 떨어지니 조금 더 높게 잡으세요' : '합격선 안입니다']);
   $('#scoreResult').innerHTML = `<div><small>총점</small><strong>${j.got.length ? j.total : '–'}</strong> <span class="muted">/ 300 이상</span></div>
     <div><small>평균</small><strong>${j.avg == null ? '–' : (Math.round(j.avg * 10) / 10)}</strong> <span class="muted">/ 60 이상</span></div>
-    <div class="verdict ${cls}">${msg}</div>`;
+    ${out.map(([c, m]) => `<div class="verdict ${c}">${m}</div>`).join('')}`;
   const cell = (r, i) => { const x = val(r, i); return x == null ? '<td>·</td>' : x < 40 ? `<td class="low"><span>${x}</span></td>` : `<td>${x}</td>`; };
   $('#hist').innerHTML = `<tr><th>과목</th>${ROUNDS.map(r => `<th>${r[1]}</th>`).join('')}</tr>` +
     SUBJ.map((_, i) => `<tr><td>${SHORT[i]}</td>${ROUNDS.map(r => cell(r[0], i)).join('')}</tr>`).join('') +
@@ -432,11 +284,37 @@ function renderPlan() {
   }).join('');
 }
 $('#examDate').onchange = e => { S.exam = e.target.value; save(); renderPlan(); };
+
+// 실기 역산: 필기 면제는 필기 합격 발표일부터 2년
+const dleft = d => Math.round((new Date(d + 'T00:00:00') - today0()) / DAY);
+const dtxt = n => n > 0 ? `D-${n}` : n === 0 ? 'D-DAY' : `${-n}일 지남`;
+function renderPrac() {
+  document.querySelectorAll('#prac [data-k]').forEach(el => el.value = S[el.dataset.k] || '');
+  const li = [];
+  if (S.apply) li.push(['', '실기 원서접수 시작까지', dtxt(dleft(S.apply))]);
+  if (S.prac) li.push(['', '실기 시험까지', dtxt(dleft(S.prac))]);
+  if (S.pass) {
+    const e = new Date(S.pass + 'T00:00:00'); e.setFullYear(e.getFullYear() + 2);
+    const es = `${e.getFullYear()}-${String(e.getMonth() + 1).padStart(2, '0')}-${String(e.getDate()).padStart(2, '0')}`, n = dleft(es);
+    li.push([n < 180 ? 'alert' : '', `필기 면제 끝 (${es} 무렵)`, dtxt(n)]);
+  }
+  $('#pracList').innerHTML = li.length ? li.map(([c, a, b]) => `<li class="${c}"><span>${a}</span><b>${b}</b></li>`).join('') +
+    (S.pass ? '<li><span class="muted">이 날까지 실기에 붙지 못하면 필기부터 다시 봐야 합니다. 정확한 날짜는 큐넷에서 확인하세요.</span></li>' : '')
+    : '<li><span class="muted">필기 합격 발표일을 넣으면 필기 면제가 끝나는 날(2년)을 셉니다.</span></li>';
+}
+$('#prac').onchange = e => { const k = e.target.dataset.k; if (k) { S[k] = e.target.value; save(); renderPrac(); } };
 $('#weeks').onchange = e => { S.weeks[+e.target.dataset.i] = e.target.checked; save(); renderPlan(); };
 
 /* ---------- 3. 오답노트 (사진은 IndexedDB, 이 폰에만) ---------- */
 const NSUBJ = ['회로', '자기', '기기', '전력', 'KEC'];
-const WHY = ['공식 몰라서', '계산 실수', '단위·지수', '문제 잘못 읽음'];
+// 기록에는 순서 번호로 저장된다. 순서를 바꾸거나 지우지 말고 뒤에만 붙일 것.
+const WHY = ['공식 몰라서', '계산 실수', '단위 누락·지수', '문제 잘못 읽음', '풀이 과정 생략', '계산기 조작 실수', '공식 선택 실수', '개념 몰랐음'];
+const WHY_TIP = {
+  2: '답을 쓸 때 단위까지 한 번에 쓰는 연습을 하세요. 실기는 단위가 빠지면 감점입니다.',
+  4: '실기 답안은 풀이 과정까지 점수입니다. 식 → 숫자 대입 → 답 순서로 적으세요.',
+  5: '<a href="#calc" data-go="calc">계산기 탭</a>에서 키 순서를 따라 눌러 보세요.',
+  6: '<a href="#cards" data-go="cards">공식 카드</a>의 「조건 → 공식」으로 연습하세요.',
+};
 const dbp = new Promise((ok, no) => {
   const q = indexedDB.open('supo', 1);
   q.onupgradeneeded = () => q.result.createObjectStore('notes', { keyPath: 'id' });
@@ -456,11 +334,13 @@ async function loadNotes() { notes = (await store('readonly', s => s.getAll())).
 function renderNotes() {
   urls.forEach(URL.revokeObjectURL); urls = [];
   $('#noteFilter').innerHTML = ['전체', ...NSUBJ].map(s => `<button aria-pressed="${s === nFilter}">${s}</button>`).join('');
-  const tally = WHY.map((w, i) => [w, notes.filter(n => n.why.includes(i)).length]).filter(x => x[1]).sort((a, b) => b[1] - a[1]);
+  const tally = WHY.map((w, i) => [w, notes.filter(n => n.why.includes(i)).length, i]).filter(x => x[1]).sort((a, b) => b[1] - a[1]);
   const left = notes.filter(n => !isDone(n)).length;
+  const top = tally[0];
   $('#weak').innerHTML = notes.length
     ? `오답 <b>${notes.length}</b>개 · 줄 안 그은 것 <b>${left}</b>개` +
-      (tally.length ? `<br>③ 왜 틀렸나 — ${tally.map(([w, c]) => `${w} <b>${c}</b>`).join(' · ')}<br><span class="muted">체크가 쌓이는 칸이 내 약점입니다.</span>` : '')
+      (top ? `<span class="top1">가장 많이 틀린 이유: <b>${top[0]}</b> (${top[1]}번)${WHY_TIP[top[2]] ? `<br><small>${WHY_TIP[top[2]]}</small>` : ''}</span>` +
+        `③ 왜 틀렸나 — ${tally.map(([w, c]) => `${w} <b>${c}</b>`).join(' · ')}` : '')
     : '틀린 문제를 사진으로 찍어 두세요. <span class="muted">한 문제 = 한 칸</span>';
   const list = notes.filter(n => (nFilter === '전체' || n.subj === nFilter) && !($('#hideDone').checked && isDone(n)));
   $('#noteList').innerHTML = list.length ? list.map(n => {
@@ -475,6 +355,7 @@ function renderNotes() {
 }
 $('#noteFilter').onclick = e => { const b = e.target.closest('button'); if (b) { nFilter = b.textContent; renderNotes(); } };
 $('#hideDone').onchange = renderNotes;
+$('#weak').onclick = e => { const a = e.target.closest('[data-go]'); if (a) { e.preventDefault(); showTab(a.dataset.go); } };
 
 const dlg = $('#noteDlg'), F = $('#noteForm');
 $('#fSubj').innerHTML = NSUBJ.map(s => `<label><input type="radio" name="subj" value="${s}">${s}</label>`).join('');
@@ -565,6 +446,31 @@ const CARDS = [
   ['KEC 숫자', '설비불평형률: 저압 단상3선식 [[40 % 이하]], 3상 3선식·3상 4선식 [[30 % 이하]]'],
   ['KEC 숫자', '전선 색: L1 [[갈색]], L2 [[흑색]], L3 [[회색]], N [[청색]], 보호도체 [[녹색-노란색]]'],
 ];
+// 「조건 → 공식」 앞면: 문제에 이런 말이 나오면 (CARDS와 같은 순서)
+const COND = [
+  '전압·전류·저항 중 둘을 주고 나머지나 전력을 물을 때',
+  'R과 X(리액턴스)를 주고 임피던스·역률을 물을 때',
+  '유효전력·무효전력을 주고 피상전력을 물을 때',
+  '역률 0.6 또는 0.8이 주어지고 sinθ가 필요할 때',
+  '저항 두 개를 병렬로 연결했을 때',
+  'Y결선·Δ결선에서 상전압·선전류를 물을 때',
+  'Δ결선 임피던스를 Y결선으로 바꿀 때',
+  '주파수 f와 L 또는 C를 주고 리액턴스를 물을 때',
+  '직렬 공진 · L과 C를 주고 주파수를 물을 때',
+  '3상 부하에 선간전압·선전류·역률이 주어졌을 때',
+  '역률을 ○○에서 ○○로 개선 · 콘덴서 용량',
+  '송전전압을 n배로 올렸을 때 손실·전압강하',
+  '주파수·극수·회전수를 주고 동기속도·슬립을 물을 때',
+  '변압기 최대효율 조건 · 철손·동손이 주어졌을 때',
+  '진공 중 두 전하 사이의 힘',
+  'mH, μF처럼 단위 앞글자가 붙은 값을 계산기에 넣을 때',
+  '저압·고압·특고압을 구분할 때',
+  '설비불평형률 기준을 물을 때',
+  '상별 전선 색(L1·L2·L3·N·보호도체)을 물을 때',
+];
+const cardText = (i, open) => S.cmode === 'cond' && !open
+  ? `<span class="when">${COND[i]}</span>`
+  : CARDS[i][1].replace(/\[\[(.+?)\]\]/g, '<span class="hole">$1</span>');
 let cFilter = '전체', cIdx = 0;
 const deck = () => CARDS.map((c, i) => i).filter(i => (cFilter === '전체' || CARDS[i][0] === cFilter) && !($('#onlyUnknown').checked && S.known.includes(i)));
 function renderCard() {
@@ -578,15 +484,22 @@ function renderCard() {
   cIdx = (cIdx + d.length) % d.length;
   const i = d[cIdx], [cat, t] = CARDS[i];
   $('#fcat').textContent = cat;
-  $('#ftxt').innerHTML = t.replace(/\[\[(.+?)\]\]/g, '<span class="hole">$1</span>');
+  $('#ftxt').innerHTML = cardText(i, false);
+  $('#fhint').textContent = S.cmode === 'cond' ? '눌러서 쓸 공식 보기 · 옆으로 밀어서 넘기기' : '눌러서 빈칸 보기 · 옆으로 밀어서 넘기기';
   $('#fhint').hidden = false;
+  document.querySelectorAll('#cmode button').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === S.cmode));
   fc.classList.toggle('known', S.known.includes(i));
   $('#fknow').disabled = false;
   $('#fknow').setAttribute('aria-pressed', S.known.includes(i));
   $('#fcount').textContent = `${cIdx + 1} / ${d.length} · 외운 카드 ${S.known.length} / ${CARDS.length}`;
 }
 let swiped = false;
-const flip = () => { if (swiped) { swiped = false; return; } $('#fcard').classList.toggle('open'); };
+const flip = () => {
+  if (swiped) { swiped = false; return; }
+  const open = $('#fcard').classList.toggle('open'), i = deck()[cIdx];
+  if (i != null) $('#ftxt').innerHTML = cardText(i, open);
+};
+$('#cmode').onclick = e => { const b = e.target.closest('button'); if (b) { S.cmode = b.dataset.m; save(); renderCard(); } };
 const move = k => { cIdx += k; renderCard(); };
 $('#fcard').onclick = flip;
 $('#fcard').onkeydown = e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flip(); } };
@@ -607,7 +520,7 @@ $('#fcard').addEventListener('pointerup', e => {
 });
 
 /* ---------- 시작 ---------- */
-renderScore(); renderPlan(); renderCard(); loadNotes();
+renderScore(); renderPlan(); renderPrac(); renderCard(); loadNotes(); calcApp($('#calcRoot'), CALC);
 showTab(TITLES[location.hash.slice(1)] ? location.hash.slice(1) : 'score');
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 </script>
